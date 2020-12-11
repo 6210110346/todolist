@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
@@ -9,8 +10,8 @@ class Todo extends Equatable {
   bool complete;
   String id;
 
-  Todo(
-    this.task, {
+  Todo({
+    @required this.task,
     this.complete = false,
     this.note = '',
     id,
@@ -22,3 +23,12 @@ class Todo extends Equatable {
   // @override
   // String toString() => 'Todo {complete: $complete, task: $task}';
 }
+
+List<Todo> todosList = <Todo>[
+  Todo(
+      task: "how to train your dragon",
+      note: 'step one, train your cat before'),
+  Todo(
+      task: "how to train your cat",
+      note: 'step one, give me five hundred dollars'),
+];

@@ -1,10 +1,10 @@
 part of 'todos_bloc.dart';
 
 @immutable
-abstract class TodosState {}
+class TodosState extends Equatable {
+  List<Todo> todos = todosList;
+  TodosState({this.todos});
 
-class TodosInitial extends TodosState {}
-
-class TodoSuccess extends TodosState {
-  List<Todo> todos = [];
+  @override
+  List<Object> get props => [todos];
 }

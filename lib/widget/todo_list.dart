@@ -2,16 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/model/model.dart';
 
-class Stats extends StatelessWidget {
-  List<Todo> todos;
-  Stats({this.todos});
-  int activeNum = 0;
-  int completeNum = 0;
-
+class TodoList extends StatelessWidget {
   @override
+  final Todo todo;
+  TodoList({@required this.todo});
+
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('${activeNum}'),
+    return ListTile(
+      title: Text(todo.task),
     );
   }
 }
