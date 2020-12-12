@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/model/model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do/blocs/blocs.dart';
 
 class Stats extends StatelessWidget {
-  List<Todo> todos;
-  Stats({this.todos});
-  int activeNum = 0;
-  int completeNum = 0;
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('${activeNum}'),
+    return BlocBuilder<StatsBloc, StatsState>(
+      builder: (context, state) {
+        return Center(
+          child: Text('${state.activeNum}'),
+        );
+      },
     );
   }
 }

@@ -12,48 +12,63 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: taps.length,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(this.title),
-            actions: [
-              PopupMenuButton<ExtraAction>(
-                itemBuilder: (BuildContext context) {
-                  return extras.map((ExtraAction extra) {
-                    return PopupMenuItem<ExtraAction>(
-                      value: extra,
-                      child: Text(extra.title),
-                    );
-                  }).toList();
-                },
+    return BlocBuilder<TodosBloc, TodosState>(
+      builder: (context, state) {
+        return MaterialApp(
+          home: DefaultTabController(
+            length: taps.length,
+            child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text(this.title),
+                actions: [
+                  PopupMenuButton<ExtraAction>(
+                    itemBuilder: (BuildContext context) => [
+                      PopupMenuItem(
+                        child: BlocProvider(
+                          create: (_) => TodosBloc()..add(TodoCompleteAll()),
+                          child: Text('Complete All'),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Clear Complete'),
+                      )
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-          body: BlocProvider(
-            create: (_) => TodosBloc()..add(TodoLoad()),
-            child: TabBarView(
-              children: <Widget>[ShowList(), Stats()],
+              body: Center(
+                child: TabBarView(
+                  children: <Widget>[
+                    BlocProvider(
+                      create: (context) => TodosBloc()..add(TodoLoad()),
+                      child: ShowList(),
+                    ),
+                    BlocProvider(
+                      create: (_) => StatsBloc()..add(StatsLoad(state.todos)),
+                      child: Stats(),
+                    )
+                  ],
+                ),
+              ),
+              bottomNavigationBar: SafeArea(
+                child: Container(
+                  color: Theme.of(context).primaryColor,
+                  child: TabBar(
+                    unselectedLabelColor: Colors.black,
+                    tabs: taps.map((Tap tap) {
+                      return Tab(
+                        text: tap.title,
+                        icon: Icon(tap.icon),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
             ),
           ),
-          bottomNavigationBar: SafeArea(
-            child: Container(
-              color: Theme.of(context).primaryColor,
-              child: TabBar(
-                unselectedLabelColor: Colors.black,
-                tabs: taps.map((Tap tap) {
-                  return Tab(
-                    text: tap.title,
-                    icon: Icon(tap.icon),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -33,17 +33,25 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Future<List<Todo>> _loadToState(state) async {
     final List<Todo> todos = todosList;
+    todos.forEach((todo) {
+      print(todo.task);
+      print(todo.complete);
+    });
     return todos;
   }
 
   Future<TodosState> _addToState(state) async {}
   Future<TodosState> _updateToState(state) async {}
   Future<TodosState> _deleteToState(state) async {}
-  Future<TodosState> _completeAllToState(state) async {}
-  Future<TodosState> _clearCompleteToState(state) async {}
+  Future<TodosState> _completeAllToState(state) async {
+    todosList.forEach((todo) {
+      todo.complete = true;
+      print(todo.task);
+      print(todo.complete);
+    });
 
-  Future<List<Todo>> fetchListTodos() async {
-    final todos = todosList;
-    return todos;
+    return TodosState(todos: todosList);
   }
+
+  Future<TodosState> _clearCompleteToState(state) async {}
 }
