@@ -9,7 +9,10 @@ class Stats extends StatelessWidget {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
         return Center(
-          child: Text('${state.activeNum}'),
+          child: Text(
+            '${state.activeNum}',
+            style: Theme.of(context).textTheme.headline4,
+          ),
         );
       },
     );

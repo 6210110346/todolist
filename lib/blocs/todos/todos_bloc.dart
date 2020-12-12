@@ -10,7 +10,7 @@ part 'todos_event.dart';
 part 'todos_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
-  TodosBloc() : super(TodosState(todos: []));
+  TodosBloc() : super(TodosState([]));
 
   @override
   Stream<TodosState> mapEventToState(
@@ -23,16 +23,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     } else if (event is TodoUpdate) {
       yield* await _updateToState(event);
     } else if (event is TodoDelete) {
-      yield await _deleteToState(state);
+      yield await _deleteToState();
     } else if (event is TodoCompleteAll) {
-      yield await _completeAllToState(state);
+      yield await _completeAllToState();
     } else if (event is TodoClearComplete) {
-      yield await _clearCompleteToState(state);
+      yield await _clearCompleteToState();
     }
   }
 
   Stream<TodosState> loadToState() async* {
-    yield TodosState(todos: todosList);
+    yield TodosState(todosList);
   }
 
   Future<TodosState> _addToState(event) async {}
@@ -40,19 +40,21 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     final List<Todo> updateTodos = (state as TodosState).todos.map((todo) {
       return todo.id == event.todo.id ? event.todo : todo;
     }).toList();
-    yield TodosState(todos: updateTodos);
+    yield TodosState(updateTodos);
   }
 
-  Future<TodosState> _deleteToState(state) async {}
-  Future<TodosState> _completeAllToState(state) async {
-    todosList.forEach((todo) {
-      todo.complete = true;
-      print(todo.task);
-      print(todo.complete);
-    });
-
-    return TodosState(todos: todosList);
+  Future<TodosState> _deleteToState() async {}
+  Future<TodosState> _completeAllToState() async {
+    final List<Todo> updateTodos = (state as TodosState).todos.map((todo) {
+      return todo.copyWith(complete: true);
+    }).toList();
+    return TodosState(updateTodos);
   }
 
-  Future<TodosState> _clearCompleteToState(state) async {}
+  Future<TodosState> _clearCompleteToState() async {
+    final List<Todo> updateTodos = (state as TodosState).todos.where((todo) {
+      return !todo.complete;
+    }).toList();
+    return TodosState(updateTodos);
+  }
 }

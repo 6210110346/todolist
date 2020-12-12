@@ -23,14 +23,25 @@ class MyHomePage extends StatelessWidget {
                 title: Text(this.title),
                 actions: [
                   PopupMenuButton<ExtraAction>(
+                    onSelected: (action) {
+                      switch (action) {
+                        case ExtraAction.completeAll:
+                          BlocProvider.of<TodosBloc>(context)
+                              .add(TodoCompleteAll());
+                          break;
+                        case ExtraAction.clearComplete:
+                          BlocProvider.of<TodosBloc>(context)
+                              .add(TodoClearComplete());
+                          break;
+                      }
+                    },
                     itemBuilder: (BuildContext context) => [
                       PopupMenuItem(
-                        child: BlocProvider(
-                          create: (_) => TodosBloc()..add(TodoCompleteAll()),
-                          child: Text('Complete All'),
-                        ),
+                        value: ExtraAction.completeAll,
+                        child: Text('Complete All'),
                       ),
                       PopupMenuItem(
+                        value: ExtraAction.clearComplete,
                         child: Text('Clear Complete'),
                       )
                     ],
@@ -42,7 +53,10 @@ class MyHomePage extends StatelessWidget {
                   children: <Widget>[
                     ShowList(),
                     BlocProvider(
-                      create: (_) => StatsBloc()..add(StatsLoad(state.todos)),
+                      create: (_) => StatsBloc()
+                        ..add(
+                          StatsLoad(state.todos),
+                        ),
                       child: Stats(),
                     )
                   ],
