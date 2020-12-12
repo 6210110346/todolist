@@ -21,9 +21,8 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   Future<StatsState> _mapLoadToState(List<Todo> todos) async {
-    final int activeNum = todos.where((todo) => !todo.complete).toList().length;
-    final int completeNum =
-        todos.where((todo) => todo.complete).toList().length;
+    int activeNum = todos.where((todo) => !todo.complete).toList().length;
+    int completeNum = todos.where((todo) => todo.complete).toList().length;
     return state.copyWith(activeNum: activeNum, completeNum: completeNum);
   }
 }

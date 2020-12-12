@@ -17,11 +17,11 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     TodosEvent event,
   ) async* {
     if (event is TodoLoad) {
-      yield TodosState(todos: await _loadToState(state.todos));
+      yield* loadToState();
     } else if (event is TodoAdd) {
       yield await _addToState(state);
     } else if (event is TodoUpdate) {
-      yield await _updateToState(state);
+      yield* await _updateToState(event);
     } else if (event is TodoDelete) {
       yield await _deleteToState(state);
     } else if (event is TodoCompleteAll) {
@@ -31,17 +31,18 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
-  Future<List<Todo>> _loadToState(state) async {
-    final List<Todo> todos = todosList;
-    todos.forEach((todo) {
-      print(todo.task);
-      print(todo.complete);
-    });
-    return todos;
+  Stream<TodosState> loadToState() async* {
+    yield TodosState(todos: todosList);
   }
 
-  Future<TodosState> _addToState(state) async {}
-  Future<TodosState> _updateToState(state) async {}
+  Future<TodosState> _addToState(event) async {}
+  Stream<TodosState> _updateToState(TodoUpdate event) async* {
+    final List<Todo> updateTodos = (state as TodosState).todos.map((todo) {
+      return todo.id == event.todo.id ? event.todo : todo;
+    }).toList();
+    yield TodosState(todos: updateTodos);
+  }
+
   Future<TodosState> _deleteToState(state) async {}
   Future<TodosState> _completeAllToState(state) async {
     todosList.forEach((todo) {

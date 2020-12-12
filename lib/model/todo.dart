@@ -17,6 +17,14 @@ class Todo extends Equatable {
     id,
   }) : this.id = id ?? uuid.v4();
 
+  Todo copyWith({String task, String note, bool complete, String id}) {
+    return Todo(
+        task: task ?? this.task,
+        note: note ?? this.note,
+        complete: complete ?? this.complete,
+        id: id ?? this.id);
+  }
+
   @override
   List<Object> get props => [task, complete, note, id];
 

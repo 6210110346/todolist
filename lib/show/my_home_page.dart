@@ -40,10 +40,7 @@ class MyHomePage extends StatelessWidget {
               body: Center(
                 child: TabBarView(
                   children: <Widget>[
-                    BlocProvider(
-                      create: (context) => TodosBloc()..add(TodoLoad()),
-                      child: ShowList(),
-                    ),
+                    ShowList(),
                     BlocProvider(
                       create: (_) => StatsBloc()..add(StatsLoad(state.todos)),
                       child: Stats(),

@@ -19,8 +19,10 @@ class TodoDelete extends TodosEvent {
 }
 
 class TodoUpdate extends TodosEvent {
+  final Todo todo;
+  TodoUpdate(this.todo);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [todo];
 }
 
 class TodoCompleteAll extends TodosEvent {
